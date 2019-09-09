@@ -5,32 +5,153 @@
 #include <argent/core.h>
 
 
+/**************************************************************************//**
+ * @defgroup log Argent Middleware Logging Module
+ * Runtime logging of events.
+ *
+ * Logging is an essential component for any sizable application. The Argent
+ * Middleware Logging Module provides an interface for writing timestamped log
+ * messages. These messages can be decorated as trace, warning or error messages
+ * in order to make the context apparent and the message easily grep-able.
+ *
+ * The logging module attempts to be as thread-safe as possible, but this has
+ * not been confirmed as yet. The logging module has been intentionally designed
+ * to not raise any errors, and instead, handle failure conditions either
+ * silently, or at most, with a warning message printed on to @c stdout.
+ * @{
+ */
+
+
+/**
+ * Open default log file.
+ *
+ * The @c arm_log_open() function opens a log file with a given fully qualified
+ * @p path where all log messages will be saved by default. In case the log file
+ * specified by @p path does not exist, then it will be created. If the log file
+ * is opened with the flag @p flush set to @c true, then any existing data in
+ * the log file will be erased. Conversely, if the flag @p flush is set to be @c
+ * false, theny any existing data in the log file will be retained, and the new
+ * log messages will be appended after them.
+ *
+ * @param path Fully qualifed path of log file.
+ * @param flush Flag to flush log file on opening.
+ *
+ * @note There is no need to call @c arm_log_allow() after calling this function
+ * as @c arm_log_open() allows logging by default. Also note that calling the @c
+ * arm_log_open() function is safe even if a default log file is currently open;
+ * in such a case, the currently open log file will be first closed before the
+ * new one is opened. In the unlikely event of @c arm_log_open() failing to open
+ * the log file, then an appropriate warning is printed onto @c stdout.
+ *
+ * @warning Be sure to close the log file opened with @c arm_log_open() once you
+ * are done with it by making a call to @c arm_log_close() in order to prevent
+ * resource leaks. Unlike dynamically allocated pointers on the heap, the Argent
+ * Middleware Library does not manage the automatic clean-up of log files.
+ *
+ * @see arm_log_close()
+ */
 extern arc_hot void
 arm_log_open(const char *path, bool flush);
 
 
+/**
+ * Close default log file.
+ *
+ * The @c arm_log_close() function closes the default log file that was opened
+ * earlier by a call to @c arm_log_open(). Be sure to call this function after
+ * you are done using the log file in order to prevent resource leaks.
+ *
+ * @note It is safe to call this function even if the default log file has not
+ * been successfully opened. This is an intended feature to allow this function
+ * to be safely called in case an error has occurred.
+ *
+ * @warning Unlike dynamically allocated pointers on the heap, the Argent
+ * Middleware Library does not manage the automatic clean-up of log files.
+ *
+ * @see arm_log_open()
+ */
 extern void
 arm_log_close(void);
 
 
+/**
+ * @private
+ * Private helper function for the logging macros defined below.
+ */
 extern arc_hot void
 arm_log_write__(const char, const char *, ...);
 
 
+/**
+ * Log trace message.
+ *
+ * The @c arm_log_trace() macro writes a formatted trace message @p m in the
+ * currently open log file. The message is decorated with the current local
+ * system time and a [T] prefix to make it easily grep-able.
+ *
+ * @param m Formatted message to log.
+ * @param ... Format tokens.
+ *
+ * @note It is safe to call this macro even if the log file has not been opened
+ * by an earlier call to @c arm_log_open(); however, no message will be logged.
+ *
+ * @see arm_log_warning()
+ * @see arm_log_error()
+ */
 #define arm_log_trace(m, ...) \
     arm_log_write__('T', (m), ##__VA_ARGS__)
 
 
+/**
+ * Log warning message.
+ *
+ * The @c arm_log_warning() macro wirtes a formatted warning message @p m in the
+ * currently open log file. The message is decorated with the current local
+ * system time and a [W] prefix to make it easily grep-able.
+ *
+ * @param m Formatted message to log.
+ * @param ... Format tokens.
+ *
+ * @note It is safe to call this macro even if the log file has not been opened
+ * by an earlier call to @c arm_log_open(); however, no message will be logged.
+ *
+ * @see arm_log_trace()
+ * @see arm_log_error()
+ */
 #define arm_log_warning(m, ...) \
     arm_log_write__('W', (m), ##__VA_ARGS__)
 
 
+/**
+ * Log error message.
+ *
+ * The @c arm_log_error() macro wirtes a formatted error message @p m in the
+ * currently open log file. The message is decorated with the current local
+ * system time and a [E] prefix to make it easily grep-able.
+ *
+ * @param m Formatted message to log.
+ * @param ... Format tokens.
+ *
+ * @note It is safe to call this macro even if the log file has not been opened
+ * by an earlier call to @c arm_log_open(); however, no message will be logged.
+ *
+ * @see arm_log_trace()
+ * @see arm_log_warning()
+ */
 #define arm_log_error(m, ...) \
     arm_log_write__('E', (m), ##__VA_ARGS__)
 
 
+/**
+ * @example log.h
+ * This is an example showing how to code against the PCR Logging Module
+ * interface.
+ * @}
+ */
+
+
 /**************************************************************************//**
- * @defgroup mpool Argent Memory Pool Module
+ * @defgroup mpool Argent Middleware Memory Pool Module
  * Garbage-collected heap memory management.
  *
  * Compared to manual memory management, garbage collection provides a few
