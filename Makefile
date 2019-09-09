@@ -1,4 +1,4 @@
-LIB_INP = bld/mpool.o
+LIB_INP = bld/log.o bld/mpool.o
 LIB_OUT = bld/libargent-middleware.so
 LIB_OPT = -shared -g -O2
 
