@@ -143,6 +143,31 @@ arm_log_write__(const char, const char *, ...);
 
 
 /**
+ * Log current error code.
+ *
+ * The @c arm_log_erno() macro logs the error code in the current context if it
+ * is not ARC_ERNO_NULL. The current function, file name and line number are
+ * also logged.
+ *
+ * @note This is a convenience wrapper around @c arm_log_error(), and it is safe
+ * to call this macro even if the log file has not been opened by an earlier
+ * call to @c arm_log_open(); however, in that case, no message will be logged.
+ *
+ * @warning Since this macro makes a call to @c arc_erno_get(), it can only be
+ * used within an @c ARC_TRY, @c ARC_CATCH, or @c ARC_FINALLY block.
+ *
+ * @see arm_log_error()
+ */
+#define arm_log_erno()                                                 \
+do {                                                                   \
+    if (arc_likely (arc_erno_get ())) {                                \
+        arm_log_error ("error 0x%x detected in %s() [%s:%d]",          \
+                       arc_erno_get (), __func__, __FILE__, __LINE__); \
+    }                                                                  \
+} while (0)
+
+
+/**
  * @example log.h
  * This is an example showing how to code against the PCR Logging Module
  * interface.
