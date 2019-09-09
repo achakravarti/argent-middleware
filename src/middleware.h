@@ -5,6 +5,30 @@
 #include <argent/core.h>
 
 
+extern arc_hot void
+arm_log_open(const char *path, bool flush);
+
+
+extern void
+arm_log_close(void);
+
+
+extern arc_hot void
+arm_log_write__(const char, const char *, ...);
+
+
+#define arm_log_trace(m, ...) \
+    arm_log_write__('T', (m), ##__VA_ARGS__)
+
+
+#define arm_log_warning(m, ...) \
+    arm_log_write__('W', (m), ##__VA_ARGS__)
+
+
+#define arm_log_error(m, ...) \
+    arm_log_write__('E', (m), ##__VA_ARGS__)
+
+
 /**************************************************************************//**
  * @defgroup mpool Argent Memory Pool Module
  * Garbage-collected heap memory management.
