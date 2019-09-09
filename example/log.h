@@ -4,6 +4,24 @@
 #include <argent/middleware.h>
 
 
+    /* this is an example of a function that makes a call to arm_log_erno() when
+     * it encounters an error; note that arm_log_erno() can only be called in
+     * either the ARC_TRY, ARC_CATCH, or ARC_FINALLY blocks */
+static arc_erno
+foo(void)
+{
+ARC_TRY:
+    void *bfr = NULL;
+    arc_assert_handle (bfr);
+
+ARC_CATCH:
+    arm_log_erno ();
+
+ARC_FINALLY:
+    return arc_erno_get ();
+}
+
+
 int main(void)
 {
         /* this is how you would open a log file, flushing out its existing
