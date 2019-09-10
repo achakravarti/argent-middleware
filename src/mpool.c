@@ -36,6 +36,8 @@ ARC_TRY:
 
 ARC_CATCH:
         /* log and update current error code */
+    arm_log_erno ();
+    arm_log_error ("failed to allocate %lu bytes of memory", sz);
     arc_erno_set (ARM_ERNO_MPOOL);
 
 ARC_FINALLY:
@@ -45,7 +47,7 @@ ARC_FINALLY:
 
 
     /* implement the arm_mpool_realloc() interface function */
-extern arc_hot rush_erno
+extern arc_hot arc_erno
 arm_mpool_realloc(void **bfr, size_t sz)
 {
 ARC_TRY:
@@ -62,7 +64,9 @@ ARC_TRY:
 
 ARC_CATCH:
         /* log and update current error code */
-    arc_erno_set (ARC_ERNO_MPOOL);
+    arm_log_erno ();
+    arm_log_error ("failed to allocate %lu bytes of memory", sz);
+    arc_erno_set (ARM_ERNO_MPOOL);
 
 ARC_FINALLY:
         /* return current error code */
