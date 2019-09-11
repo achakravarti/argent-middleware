@@ -2,6 +2,7 @@
 #define ARGENT_MIDDLEWARE
 
 
+#include <stdarg.h>
 #include <argent/core.h>
 
 
@@ -25,7 +26,7 @@
 /**
  * Open default log file.
  *
- * The @c arm_log_open() function opens a log file with a given fully qualified
+ * The @c agm_log_open() function opens a log file with a given fully qualified
  * @p path where all log messages will be saved by default. In case the log file
  * specified by @p path does not exist, then it will be created. If the log file
  * is opened with the flag @p flush set to @c true, then any existing data in
@@ -36,29 +37,29 @@
  * @param path Fully qualifed path of log file.
  * @param flush Flag to flush log file on opening.
  *
- * @note There is no need to call @c arm_log_allow() after calling this function
- * as @c arm_log_open() allows logging by default. Also note that calling the @c
- * arm_log_open() function is safe even if a default log file is currently open;
+ * @note There is no need to call @c agm_log_allow() after calling this function
+ * as @c agm_log_open() allows logging by default. Also note that calling the @c
+ * agm_log_open() function is safe even if a default log file is currently open;
  * in such a case, the currently open log file will be first closed before the
- * new one is opened. In the unlikely event of @c arm_log_open() failing to open
+ * new one is opened. In the unlikely event of @c agm_log_open() failing to open
  * the log file, then an appropriate warning is printed onto @c stdout.
  *
- * @warning Be sure to close the log file opened with @c arm_log_open() once you
- * are done with it by making a call to @c arm_log_close() in order to prevent
+ * @warning Be sure to close the log file opened with @c agm_log_open() once you
+ * are done with it by making a call to @c agm_log_close() in order to prevent
  * resource leaks. Unlike dynamically allocated pointers on the heap, the Argent
  * Middleware Library does not manage the automatic clean-up of log files.
  *
- * @see arm_log_close()
+ * @see agm_log_close()
  */
-extern arc_hot void
-arm_log_open(const char *path, bool flush);
+extern agc_hot void
+agm_log_open(const char *path, bool flush);
 
 
 /**
  * Close default log file.
  *
- * The @c arm_log_close() function closes the default log file that was opened
- * earlier by a call to @c arm_log_open(). Be sure to call this function after
+ * The @c agm_log_close() function closes the default log file that was opened
+ * earlier by a call to @c agm_log_open(). Be sure to call this function after
  * you are done using the log file in order to prevent resource leaks.
  *
  * @note It is safe to call this function even if the default log file has not
@@ -68,24 +69,24 @@ arm_log_open(const char *path, bool flush);
  * @warning Unlike dynamically allocated pointers on the heap, the Argent
  * Middleware Library does not manage the automatic clean-up of log files.
  *
- * @see arm_log_open()
+ * @see agm_log_open()
  */
 extern void
-arm_log_close(void);
+agm_log_close(void);
 
 
 /**
  * @private
  * Private helper function for the logging macros defined below.
  */
-extern arc_hot void
-arm_log_write__(const char, const char *, ...);
+extern agc_hot void
+agm_log_write__(const char, const char *, ...);
 
 
 /**
  * Log trace message.
  *
- * The @c arm_log_trace() macro writes a formatted trace message @p m in the
+ * The @c agm_log_trace() macro writes a formatted trace message @p m in the
  * currently open log file. The message is decorated with the current local
  * system time and a [T] prefix to make it easily grep-able.
  *
@@ -93,19 +94,19 @@ arm_log_write__(const char, const char *, ...);
  * @param ... Format tokens.
  *
  * @note It is safe to call this macro even if the log file has not been opened
- * by an earlier call to @c arm_log_open(); however, no message will be logged.
+ * by an earlier call to @c agm_log_open(); however, no message will be logged.
  *
- * @see arm_log_warning()
- * @see arm_log_error()
+ * @see agm_log_warning()
+ * @see agm_log_error()
  */
-#define arm_log_trace(m, ...) \
-    arm_log_write__('T', (m), ##__VA_ARGS__)
+#define agm_log_trace(m, ...) \
+    agm_log_write__('T', (m), ##__VA_ARGS__)
 
 
 /**
  * Log warning message.
  *
- * The @c arm_log_warning() macro wirtes a formatted warning message @p m in the
+ * The @c agm_log_warning() macro wirtes a formatted warning message @p m in the
  * currently open log file. The message is decorated with the current local
  * system time and a [W] prefix to make it easily grep-able.
  *
@@ -113,19 +114,19 @@ arm_log_write__(const char, const char *, ...);
  * @param ... Format tokens.
  *
  * @note It is safe to call this macro even if the log file has not been opened
- * by an earlier call to @c arm_log_open(); however, no message will be logged.
+ * by an earlier call to @c agm_log_open(); however, no message will be logged.
  *
- * @see arm_log_trace()
- * @see arm_log_error()
+ * @see agm_log_trace()
+ * @see agm_log_error()
  */
-#define arm_log_warning(m, ...) \
-    arm_log_write__('W', (m), ##__VA_ARGS__)
+#define agm_log_warning(m, ...) \
+    agm_log_write__('W', (m), ##__VA_ARGS__)
 
 
 /**
  * Log error message.
  *
- * The @c arm_log_error() macro wirtes a formatted error message @p m in the
+ * The @c agm_log_error() macro wirtes a formatted error message @p m in the
  * currently open log file. The message is decorated with the current local
  * system time and a [E] prefix to make it easily grep-able.
  *
@@ -133,36 +134,36 @@ arm_log_write__(const char, const char *, ...);
  * @param ... Format tokens.
  *
  * @note It is safe to call this macro even if the log file has not been opened
- * by an earlier call to @c arm_log_open(); however, no message will be logged.
+ * by an earlier call to @c agm_log_open(); however, no message will be logged.
  *
- * @see arm_log_trace()
- * @see arm_log_warning()
+ * @see agm_log_trace()
+ * @see agm_log_warning()
  */
-#define arm_log_error(m, ...) \
-    arm_log_write__('E', (m), ##__VA_ARGS__)
+#define agm_log_error(m, ...) \
+    agm_log_write__('E', (m), ##__VA_ARGS__)
 
 
 /**
  * Log current error code.
  *
- * The @c arm_log_erno() macro logs the error code in the current context if it
- * is not ARC_ERNO_NULL. The current function, file name and line number are
+ * The @c agm_log_erno() macro logs the error code in the current context if it
+ * is not AGC_ERNO_NULL. The current function, file name and line number are
  * also logged.
  *
- * @note This is a convenience wrapper around @c arm_log_error(), and it is safe
+ * @note This is a convenience wrapper around @c agm_log_error(), and it is safe
  * to call this macro even if the log file has not been opened by an earlier
- * call to @c arm_log_open(); however, in that case, no message will be logged.
+ * call to @c agm_log_open(); however, in that case, no message will be logged.
  *
- * @warning Since this macro makes a call to @c arc_erno_get(), it can only be
- * used within an @c ARC_TRY, @c ARC_CATCH, or @c ARC_FINALLY block.
+ * @warning Since this macro makes a call to @c agc_erno_get(), it can only be
+ * used within an @c AGC_TRY, @c AGC_CATCH, or @c AGC_FINALLY block.
  *
- * @see arm_log_error()
+ * @see agm_log_error()
  */
-#define arm_log_erno()                                                 \
+#define agm_log_erno()                                                 \
 do {                                                                   \
-    if (arc_likely (arc_erno_get ())) {                                \
-        arm_log_error ("error 0x%x detected in %s() [%s:%d]",          \
-                       arc_erno_get (), __func__, __FILE__, __LINE__); \
+    if (agc_likely (agc_erno_get ())) {                                \
+        agm_log_error ("error 0x%x detected in %s() [%s:%d]",          \
+                       agc_erno_get (), __func__, __FILE__, __LINE__); \
     }                                                                  \
 } while (0)
 
@@ -195,27 +196,27 @@ do {                                                                   \
 /**
  * Indicate memory pool error.
  *
- * The @c ARM_ERNO_MPOOL symbolic code is an error code which indicates that one
+ * The @c AGM_ERNO_MPOOL symbolic code is an error code which indicates that one
  * of the memory pool module interface functions has failed.
  *
- * @see arm_mpool_alloc()
- * @see arm_mpool_realloc()
+ * @see agm_mpool_alloc()
+ * @see agm_mpool_realloc()
  */
-#define ARM_ERNO_MPOOL ((arc_erno) 0x00010001)
+#define AGM_ERNO_MPOOL ((agc_erno) 0x00010001)
 
 
 /**
  * Allocate heap memory from Boehm GC.
  *
- * The @c arm_mpool_alloc() function allocates @p sz bytes of heap memory to a
+ * The @c agm_mpool_alloc() function allocates @p sz bytes of heap memory to a
  * buffer @p bfr. The heap memory is allocated, and subsequently managed, by the
  * Boehm Garbage Collector.
  *
  * @param bfr Buffer to allocate heap memory.
  * @param sz Size in bytes of heap memory to allocate.
  *
- * @return ARC_ERNO_NULL if successful.
- * @return ARM_ERNO_MPOOL if unsuccessful.
+ * @return AGC_ERNO_NULL if successful.
+ * @return AGM_ERNO_MPOOL if unsuccessful.
  *
  * @note @p bfr is expected to be a valid pointer to an unallocated buffer, and
  * @p sz is expected to be greater than 0.
@@ -224,25 +225,25 @@ do {                                                                   \
  * standard @c free() function; the heap memory allocated to @p bfr is managed
  * by the Boehm Garbage Collector.
  *
- * @see arm_mpool_realloc()
+ * @see agm_mpool_realloc()
  */
-extern arc_hot arc_erno
-arm_mpool_alloc(void **bfr, size_t sz);
+extern agc_hot agc_erno
+agm_mpool_alloc(void **bfr, size_t sz);
 
 
 /**
  * Reallocate heap memory from Boehm GC.
  *
- * The @c arm_mpool_realloc() function reallocates @p sz bytes of heap memory to
+ * The @c agm_mpool_realloc() function reallocates @p sz bytes of heap memory to
  * a buffer @p bfr. This buffer is expected to have been allocated earlier by a
- * call to @c arm_mpool_alloc(). The heap memory is reallocated and managed by
+ * call to @c agm_mpool_alloc(). The heap memory is reallocated and managed by
  * the Boehm Garbage Collector.
  *
  * @param bfr Buffer to reallocate heap memory.
  * @param sz Size in bytes of heap memory to reallocate.
  *
- * @return ARC_ERNO_NULL if successful.
- * @return ARC_ERNO_MPOOL if unsuccessful.
+ * @return AGC_ERNO_NULL if successful.
+ * @return AGM_ERNO_MPOOL if unsuccessful.
  *
  * @note @p bfr is expected to be a valid pointer to an allocated buffer, and @p
  * sz is expected to be greater than 0.
@@ -251,10 +252,10 @@ arm_mpool_alloc(void **bfr, size_t sz);
  * standard @c free() function; the heap memory allocated to @p bfr is managed
  * by the Boehm Garbage Collector.
  *
- * @see arm_mpool_alloc()
+ * @see agm_mpool_alloc()
  */
-extern arc_hot rush_erno
-arm_mpool_realloc(void **bfr, size_t sz);
+extern agc_hot agc_erno
+agm_mpool_realloc(void **bfr, size_t sz);
 
 
 /**
