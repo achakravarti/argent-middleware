@@ -4,33 +4,33 @@
 #include <argent/middleware.h>
 
 
-/* This is an example of how you would use the arm_mpool_alloc() function
+/* This is an example of how you would use the ag_mpool_alloc() function
  * without the Argent Core error handling mechanism. */
 static void
 alloc(void)
 {
     int *bfr = NULL;
-    int erno = arm_mpool_alloc ((void *) &bfr, sizeof *bfr);
+    ag_erno e = ag_mpool_alloc ((void **) &bfr, sizeof *bfr);
 }
 
 
 
-/* This is an example of how you would use the arm_mpool_realloc() function
+/* This is an example of how you would use the ag_mpool_realloc() function
  * with the Argent Core error handling mechanism. */
-static arc_erno
+static ag_erno
 realloc(void)
 {
-ARC_TRY:
+AG_TRY:
     ;int *bfr = NULL;
-    arc_try (arm_mpool_alloc ((void *) &bfr, sizeof *bfr));
+    ag_try (ag_mpool_alloc ((void **) &bfr, sizeof *bfr));
 
 
     const size_t newsize = sizeof *bfr * 5;
-    arc_try (arm_mpool_realloc ((void *) &bfr, newsize ));
+    ag_try (ag_mpool_realloc ((void **) &bfr, newsize ));
 
-ARC_CATCH:
-ARC_FINALLY:
-    return arc_erno_get ();
+AG_CATCH:
+AG_FINALLY:
+    return ag_erno_get ();
 }
 
 
