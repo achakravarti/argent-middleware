@@ -51,7 +51,7 @@
  *
  * @see agm_log_close()
  */
-extern agc_hot void
+extern ag_hot void
 agm_log_open(const char *path, bool flush);
 
 
@@ -79,7 +79,7 @@ agm_log_close(void);
  * @private
  * Private helper function for the logging macros defined below.
  */
-extern agc_hot void
+extern ag_hot void
 agm_log_write__(const char, const char *, ...);
 
 
@@ -147,23 +147,23 @@ agm_log_write__(const char, const char *, ...);
  * Log current error code.
  *
  * The @c agm_log_erno() macro logs the error code in the current context if it
- * is not AGC_ERNO_NULL. The current function, file name and line number are
+ * is not AG_ERNO_NULL. The current function, file name and line number are
  * also logged.
  *
  * @note This is a convenience wrapper around @c agm_log_error(), and it is safe
  * to call this macro even if the log file has not been opened by an earlier
  * call to @c agm_log_open(); however, in that case, no message will be logged.
  *
- * @warning Since this macro makes a call to @c agc_erno_get(), it can only be
- * used within an @c AGC_TRY, @c AGC_CATCH, or @c AGC_FINALLY block.
+ * @warning Since this macro makes a call to @c ag_erno_get(), it can only be
+ * used within an @c AG_TRY, @c AG_CATCH, or @c AG_FINALLY block.
  *
  * @see agm_log_error()
  */
 #define agm_log_erno()                                                 \
 do {                                                                   \
-    if (agc_likely (agc_erno_get ())) {                                \
+    if (ag_likely (ag_erno_get ())) {                                \
         agm_log_error ("error 0x%x detected in %s() [%s:%d]",          \
-                       agc_erno_get (), __func__, __FILE__, __LINE__); \
+                       ag_erno_get (), __func__, __FILE__, __LINE__); \
     }                                                                  \
 } while (0)
 
@@ -202,7 +202,7 @@ do {                                                                   \
  * @see agm_mpool_alloc()
  * @see agm_mpool_realloc()
  */
-#define AGM_ERNO_MPOOL ((agc_erno) 0x00010001)
+#define AGM_ERNO_MPOOL ((ag_erno) 0x00010001)
 
 
 /**
@@ -215,7 +215,7 @@ do {                                                                   \
  * @param bfr Buffer to allocate heap memory.
  * @param sz Size in bytes of heap memory to allocate.
  *
- * @return AGC_ERNO_NULL if successful.
+ * @return AG_ERNO_NULL if successful.
  * @return AGM_ERNO_MPOOL if unsuccessful.
  *
  * @note @p bfr is expected to be a valid pointer to an unallocated buffer, and
@@ -227,7 +227,7 @@ do {                                                                   \
  *
  * @see agm_mpool_realloc()
  */
-extern agc_hot agc_erno
+extern ag_hot ag_erno
 agm_mpool_alloc(void **bfr, size_t sz);
 
 
@@ -242,7 +242,7 @@ agm_mpool_alloc(void **bfr, size_t sz);
  * @param bfr Buffer to reallocate heap memory.
  * @param sz Size in bytes of heap memory to reallocate.
  *
- * @return AGC_ERNO_NULL if successful.
+ * @return AG_ERNO_NULL if successful.
  * @return AGM_ERNO_MPOOL if unsuccessful.
  *
  * @note @p bfr is expected to be a valid pointer to an allocated buffer, and @p
@@ -254,7 +254,7 @@ agm_mpool_alloc(void **bfr, size_t sz);
  *
  * @see agm_mpool_alloc()
  */
-extern agc_hot agc_erno
+extern ag_hot ag_erno
 agm_mpool_realloc(void **bfr, size_t sz);
 
 
