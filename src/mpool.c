@@ -19,9 +19,9 @@ gc_init(void)
 }
 
 
-    /* implement the agm_mpool_alloc() interface function */
+    /* implement the ag_mpool_alloc() interface function */
 extern ag_hot ag_erno
-agm_mpool_alloc(void **bfr, size_t sz)
+ag_mpool_alloc(void **bfr, size_t sz)
 {
 AG_TRY:
         /* assert preconditions; bfr needs to be a valid pointer to an
@@ -37,9 +37,9 @@ AG_TRY:
 
 AG_CATCH:
         /* log and update current error code */
-    agm_log_erno ();
-    agm_log_error ("failed to allocate %lu bytes of memory", sz);
-    ag_erno_set (AGM_ERNO_MPOOL);
+    ag_log_erno ();
+    ag_log_error ("failed to allocate %lu bytes of memory", sz);
+    ag_erno_set (AG_ERNO_MPOOL);
 
 AG_FINALLY:
         /* return current error code */
@@ -47,9 +47,9 @@ AG_FINALLY:
 }
 
 
-    /* implement the agm_mpool_realloc() interface function */
+    /* implement the ag_mpool_realloc() interface function */
 extern ag_hot ag_erno
-agm_mpool_realloc(void **bfr, size_t sz)
+ag_mpool_realloc(void **bfr, size_t sz)
 {
 AG_TRY:
         /* assert preconditions; bfr needs to be a valid pointer to an already
@@ -65,9 +65,9 @@ AG_TRY:
 
 AG_CATCH:
         /* log and update current error code */
-    agm_log_erno ();
-    agm_log_error ("failed to allocate %lu bytes of memory", sz);
-    ag_erno_set (AGM_ERNO_MPOOL);
+    ag_log_erno ();
+    ag_log_error ("failed to allocate %lu bytes of memory", sz);
+    ag_erno_set (AG_ERNO_MPOOL);
 
 AG_FINALLY:
         /* return current error code */

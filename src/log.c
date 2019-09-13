@@ -8,9 +8,9 @@
 static thread_local FILE *log_file = NULL;
 
 
-    /* implement the agm_log_open() interface function */
+    /* implement the ag_log_open() interface function */
 extern ag_hot void
-agm_log_open(const char *path, bool flush)
+ag_log_open(const char *path, bool flush)
 {
         /* close log file if it's alread open */
     if (ag_unlikely (log_file))
@@ -20,13 +20,13 @@ agm_log_open(const char *path, bool flush)
          * the unlikely event that the log file can't be opened */
     const char *mode = flush ? "w" : "a+";
     if (ag_unlikely (!(path && *path && (log_file = fopen (path, mode)))))
-        printf ("[warning] agm_log_open(): can\'t open log file %s\n", path);
+        printf ("[warning] ag_log_open(): can\'t open log file %s\n", path);
 }
 
 
-    /* implement the agm_log_close() interface function */
+    /* implement the ag_log_close() interface function */
 extern void
-agm_log_close(void)
+ag_log_close(void)
 {
         /* close log file if it's already open */
     if (ag_likely (log_file)) {
@@ -36,11 +36,11 @@ agm_log_close(void)
 }
 
 
-    /* implement the private helper function agm_log_write__(); this function
+    /* implement the private helper function ag_log_write__(); this function
      * performs the core process of writing timestamped log messages and is
      * called by the interface macros */
 extern ag_hot void
-agm_log_write__(const char type, const char *msg, ...)
+ag_log_write__(const char type, const char *msg, ...)
 {
         /* write log entry header with current timestamp and message type */
     time_t tm = time (NULL);
